@@ -19,14 +19,14 @@
       slideControlWidth = $slideControl_.width(),
       stepWidth = slideControlWidth / ($slideControl_.data('steps') - 1),
       targetStep = Math.round(sliderOffset / stepWidth),
-      relativeTargetPosition = Math.round(stepWidth * targetStep) / slideControlWidth,
+      relativeTargetPosition = $slideControl_.data('steps') ? Math.round(stepWidth * targetStep) / slideControlWidth : sliderOffset / slideControlWidth,
       infoObject;
     
     $slideControl_.data('relativeTargetPosition', relativeTargetPosition);
     
     infoObject = {
       targetStep: $slideControl_.data('targetStep'),
-      currentStep: $slideControl_.data('currentStep'),
+      currentStep: $slideControl_.data('steps') ? $slideControl_.data('currentStep') : null,
       relativePosition: $slideControl_.data('relativePosition'),
       relativeTargetPosition: relativeTargetPosition
     };
@@ -36,7 +36,7 @@
       infoObject.targetStep = targetStep;
       $slideControl_.trigger('onTargetSnapPositionChanged', infoObject);
     }
-    
+
     return infoObject;
   }
   
@@ -46,11 +46,29 @@
       $slider = $slideControl.find('.slider'),
       slideControlWidth = $slideControl.width(),
       stepWidth = slideControlWidth / (slideToInfoObj_.steps - 1),
-      sliderOffset = (stepWidth * slideToInfoObj_.step) / $slideControl.width();
+      sliderOffset = (stepWidth * slideToInfoObj_.step) / $slideControl.width(),
+      infoObj = _getInfoObject($slideControl, $slider);
     
-    $slideControl.trigger('onStart', _getInfoObject($slideControl, $slider));
+    $slideControl.trigger('onStart', infoObj);
+    $slideControl.trigger('onChanged', infoObj);
     $slider.animate({
       'left': (sliderOffset * 100) + '%'
+    }, 100, function() {
+      $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
+    });
+  }
+
+  function _slideToRelativePosition(slideToInfoObj_) {
+    var
+      $slideControl = slideToInfoObj_.slideControl,
+      $slider = $slideControl.find('.slider'),
+      slideControlWidth = $slideControl.width(),
+      infoObj = _getInfoObject($slideControl, $slider);
+    
+    $slideControl.trigger('onStart', infoObj);
+    $slideControl.trigger('onChanged', infoObj);
+    $slider.animate({
+      'left': (slideToInfoObj_.relativePosition * 100) + '%'
     }, 100, function() {
       $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
     });
@@ -82,6 +100,8 @@
     
     $slideControl.data('steps', settings_.steps);
     $slideControl.data('currentStep', settings_.currentStep);
+    $slideControl.data('targetStep', settings_.currentStep);
+    $slideControl.data('relativePosition', settings_.currentRelativePosition);
       
     $slider.css({
       'margin-left': $slider.width() / -2,
@@ -95,7 +115,9 @@
       settings_.onChanged(arg_);
     });
     $slideControl.on('onTargetSnapPositionChanged', function(event_, arg_) {
-      settings_.onTargetSnapPositionChanged(arg_);
+      if (settings_.steps) {
+        settings_.onTargetSnapPositionChanged(arg_);
+      }
     });
     $slideControl.on('onComplete', function(event_, arg_) {
       settings_.onComplete(arg_);
@@ -103,6 +125,8 @@
     
     if (settings_.steps && !isNaN(settings_.currentStep)) {
       $slider.css('left', relativeTargetPosition * 100 + '%');
+    } else if (!isNaN(settings_.currentRelativePosition)) {
+      $slider.css('left', settings_.currentRelativePosition * 100 + '%');
     }
     
     $slider.on('click', function(event) {
@@ -115,21 +139,28 @@
       $slideControl.addClass('dragable');
       $slider.addClass('dragable');
       $('html, body').css('cursor', 'ew-resize');
+
       $slideControl.trigger('onStart', _getInfoObject($slideControl, $slider));
     }).on('dragstart', function(event) {
       event.preventDefault();
     });
     
     $slideControl.on('click', function(event_) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
       var
         pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
-        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1));
+        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1)),
+        infoObj;
       
       $slider.css('left', relativePosition * 100 + '%');
       if (relativePosition !== $slideControl.data('relativePosition')) {
         $slideControl.data('relativePosition', relativePosition);
       }
-      $slideControl.trigger('onChanged', _getInfoObject($slideControl, $slider));
+
+      infoObj = _getInfoObject($slideControl, $slider);
+      $slideControl.trigger('onStart', infoObj);
+      $slideControl.trigger('onChanged', infoObj);
       
       _snapIntoStep($slideControl, $slider);
     });
@@ -140,7 +171,7 @@
         if (_isTouchDevice() && String(event.originalEvent).indexOf('MouseEvent') >= 0) {
           return;
         }
-          
+        
         var
           pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
           relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1));
@@ -156,6 +187,8 @@
       if ($slider.hasClass('dragable')) {
         if (!isNaN(parseInt($slideControl.data('steps'), 10))) {
           _snapIntoStep($slideControl, $slider);
+        } else {
+          $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
         }
         $slideControl.removeClass('dragable');
         $slider.removeClass('dragable');
@@ -168,13 +201,16 @@
     
     init : function(options_) {
       var settings = $.extend({
+        currentRelativePosition : 0,
         steps : undefined,
-        currentStep : (options_ && !isNaN(options_.currentStep) ? options_.currentStep : (options_ && !isNaN(options_.steps) ? (options_.steps + 1) / 2 : undefined)),
+        currentStep : 0,
         onStart : function() {},
         onChanged : function() {},
         onTargetSnapPositionChanged : function() {},
         onComplete : function() {}
       }, options_);
+      
+      settings.currentStep += 1;
       
       return this.each(function() {
         _initialize(this, settings);
@@ -183,6 +219,10 @@
     
     slideToStep : function(index_) {
       _slideToStep({step: index_, steps: this.data('steps'), slideControl: this});
+    },
+
+    slideToRelativePosition : function(relativePosition_) {
+      _slideToRelativePosition({relativePosition: relativePosition_, slideControl: this});
     }
   };
   

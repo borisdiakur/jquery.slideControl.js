@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>example usage</title>
+	<style>
+		html, body {
+			font-family: Arial, sans-serif;
+		}
+		#radio-boxes {
+			text-align: center;
+		}
+		.slide-control {
+			position: relative;
+			width: 50%;
+			height: 80px;
+			margin: 0 auto;
+			background-color: gray;
+		}
+		.slider {
+			position: relative;
+			width: 80px;
+			height: 80px;
+			background-color: red;
+			display: block;
+		}
+		.slider&:hover {
+			cursor: pointer;
+		}
+		.slider&:active, .slider&:focus {
+			cursor: ew-resize;
+		}
+	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="jquery.slideControl.js"></script>
+	<script>
+		$(function() { 'use strict';
+
+			var $radioBoxes = $('input[type=radio]');
+
+			$('#slide-control-1').slideControl({
+				currentRelativePosition : 0.25,
+				onStart : function(obj) {
+					$('#on-start-1').html('onStart => ' + JSON.stringify(obj));
+				},
+				onChanged : function(obj) {
+					$('#on-changed-1').html('onChanged => ' + JSON.stringify(obj));
+				},
+				onComplete : function(obj) {
+					$('#on-complete-1').html('onComplete => ' + JSON.stringify(obj));
+				}
+			});
+
+			$('#slide-to-relative-position-button').on('click', function() {
+				var relativePosition = $('#slide-to-relative-position-input').prop('value');
+				if (!isNaN(relativePosition) && relativePosition >= 0 && relativePosition <= 1) {
+					$('#slide-control-1').slideControl('slideToRelativePosition', relativePosition);
+				}
+			});
+
+			$('#slide-control-2').slideControl({
+				steps : $radioBoxes.size(),
+				currentStep : 3,
+				onStart : function(obj) {
+					$('#on-start-2').html('onStart => ' + JSON.stringify(obj));
+				},
+				onChanged : function(obj) {
+					$('#on-changed-2').html('onChanged => ' + JSON.stringify(obj));
+				},
+				onTargetSnapPositionChanged : function(obj) {
+					$('#on-target-snap-position-changed-2').html('onTargetSnapPositionChanged => ' + JSON.stringify(obj));
+					$radioBoxes.each(function(index, value) {
+						if (obj.targetStep === index) {
+							$(value).prop('checked', true);
+						} else {
+							$(value).prop('checked', false);
+						}
+					});
+				},
+				onComplete : function(obj) {
+					$('#on-complete-2').html('onComplete => ' + JSON.stringify(obj));
+				}
+			});
+			
+			$radioBoxes.each(function(index, value) {
+				var $radioBox = $(value);
+				
+				$radioBox.on('click', function() {
+					$('#slide-control-2').slideControl('slideToStep', index);
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+
+	<h1>example without steps</h1>
+	<div id="text-input">
+		<label>slide to relative position</label>&nbsp;<input id="slide-to-relative-position-input" type="text" placeholder="0 - 1.0"><button id="slide-to-relative-position-button">go</button>
+	</div>
+	<br>
+	<div id="slide-control-1" class="slide-control">
+		<a href="#drag-me" class="slider"></a>
+	</div>
+	<br>
+	<div id="on-start-1">&nbsp;</div>
+	<div id="on-changed-1">&nbsp;</div>
+	<div id="on-complete-1">&nbsp;</div>
+	<br>
+	<hr>
+	<br>
+	<h1>example with steps</h1>
+	<div id="radio-boxes">
+		<input type="radio" name="step" value="0"><label>step 0</label>
+		<input type="radio" name="step" value="1"><label>step 1</label>
+		<input type="radio" name="step" value="2"><label>step 2</label>
+		<input type="radio" name="step" value="3" checked><label>step 3</label>
+		<input type="radio" name="step" value="4"><label>step 4</label>
+	</div>
+	<div id="slide-control-2" class="slide-control">
+		<a href="#drag-me" class="slider"></a>
+	</div>
+	<br>
+	<div id="on-start-2">&nbsp;</div>
+	<div id="on-changed-2">&nbsp;</div>
+	<div id="on-target-snap-position-changed-2">&nbsp;</div>
+	<div id="on-complete-2">&nbsp;</div>
+	<br>
+	<hr>
+
+</body>
+</html>
