@@ -36,7 +36,7 @@
       infoObject.targetStep = targetStep;
       $slideControl_.trigger('onTargetSnapPositionChanged', infoObject);
     }
-
+    
     return infoObject;
   }
   
@@ -57,7 +57,7 @@
       $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
     });
   }
-
+  
   function _slideToRelativePosition(slideToInfoObj_) {
     var
       $slideControl = slideToInfoObj_.slideControl,
@@ -139,7 +139,7 @@
       $slideControl.addClass('dragable');
       $slider.addClass('dragable');
       $('html, body').css('cursor', 'ew-resize');
-
+      
       $slideControl.trigger('onStart', _getInfoObject($slideControl, $slider));
     }).on('dragstart', function(event) {
       event.preventDefault();
@@ -157,7 +157,7 @@
       if (relativePosition !== $slideControl.data('relativePosition')) {
         $slideControl.data('relativePosition', relativePosition);
       }
-
+      
       infoObj = _getInfoObject($slideControl, $slider);
       $slideControl.trigger('onStart', infoObj);
       $slideControl.trigger('onChanged', infoObj);
@@ -220,7 +220,7 @@
     slideToStep : function(index_) {
       _slideToStep({step: index_, steps: this.data('steps'), slideControl: this});
     },
-
+    
     slideToRelativePosition : function(relativePosition_) {
       _slideToRelativePosition({relativePosition: relativePosition_, slideControl: this});
     }
