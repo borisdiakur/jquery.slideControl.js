@@ -6,7 +6,7 @@
   var _methods;
   
   function _isTouchDevice() {
-    return window.hasOwnProperty('ontouchstart') || window.hasOwnProperty('onmsgesturechange');
+    return window.navigator.msMaxTouchPoints || 'ontouchstart' in document.documentElement;
   }
   
   function _preventBodyScrolling(event_) {
@@ -17,8 +17,8 @@
     var
       sliderOffset = ($slider_.offset().left - $slideControl_.offset().left) + ($slider_.width() / 2),
       slideControlWidth = $slideControl_.width(),
-      stepWidth = slideControlWidth / ($slideControl_.data('steps') - 1),
-      targetStep = Math.round(sliderOffset / stepWidth),
+      stepWidth = $slideControl_.data('steps') ? slideControlWidth / ($slideControl_.data('steps') - 1) : null,
+      targetStep = $slideControl_.data('steps') ? Math.round(sliderOffset / stepWidth) : null,
       relativeTargetPosition = $slideControl_.data('steps') ? Math.round(stepWidth * targetStep) / slideControlWidth : sliderOffset / slideControlWidth,
       infoObject;
     
@@ -129,9 +129,9 @@
       $slider.css('left', settings_.currentRelativePosition * 100 + '%');
     }
     
-    $slider.on('click', function(event) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+    $slider.on('click', function(event_) {
+      event_.preventDefault();
+      event_.stopImmediatePropagation();
     }).on('mousedown touchstart', function() {
       if (_isTouchDevice()) {
         $('body').css('overflow', 'hidden').on('touchmove', _preventBodyScrolling);
@@ -141,13 +141,13 @@
       $('html, body').css('cursor', 'ew-resize');
       
       $slideControl.trigger('onStart', _getInfoObject($slideControl, $slider));
-    }).on('dragstart', function(event) {
-      event.preventDefault();
+    }).on('dragstart', function(event_) {
+      event_.preventDefault();
     });
     
     $slideControl.on('click', function(event_) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+      event_.preventDefault();
+      event_.stopImmediatePropagation();
       var
         pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
         relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1)),
@@ -165,10 +165,10 @@
       _snapIntoStep($slideControl, $slider);
     });
     
-    $(window).on('mousemove touchmove', function(event_) {
+    $(document).on('mousemove touchmove', function(event_) {
       if ($slider.hasClass('dragable')) {
         
-        if (_isTouchDevice() && String(event.originalEvent).indexOf('MouseEvent') >= 0) {
+        if (_isTouchDevice() && String(event_.originalEvent).indexOf('MouseEvent') >= 0) {
           return;
         }
         

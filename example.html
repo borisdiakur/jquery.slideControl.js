@@ -24,10 +24,10 @@
 			background-color: red;
 			display: block;
 		}
-		.slider&:hover {
+		.slider:hover {
 			cursor: pointer;
 		}
-		.slider&:active, .slider&:focus {
+		.slider:active, .slider:focus {
 			cursor: ew-resize;
 		}
 	</style>
@@ -38,16 +38,25 @@
 
 			var $radioBoxes = $('input[type=radio]');
 
+			function objToString(obj) {
+				var str = '', f = true;
+				for (var p in obj) {
+					if (f) { f = false; } else { str += ', '; }
+					str += p + ': ' + obj[p];
+				}
+				return '{' + str + '}';
+			}
+
 			$('#slide-control-1').slideControl({
 				currentRelativePosition : 0.25,
 				onStart : function(obj) {
-					$('#on-start-1').html('onStart => ' + JSON.stringify(obj));
+					$('#on-start-1').html('onStart => ' + objToString(obj));
 				},
 				onChanged : function(obj) {
-					$('#on-changed-1').html('onChanged => ' + JSON.stringify(obj));
+					$('#on-changed-1').html('onChanged => ' + objToString(obj));
 				},
 				onComplete : function(obj) {
-					$('#on-complete-1').html('onComplete => ' + JSON.stringify(obj));
+					$('#on-complete-1').html('onComplete => ' + objToString(obj));
 				}
 			});
 
@@ -62,13 +71,13 @@
 				steps : $radioBoxes.size(),
 				currentStep : 3,
 				onStart : function(obj) {
-					$('#on-start-2').html('onStart => ' + JSON.stringify(obj));
+					$('#on-start-2').html('onStart => ' + objToString(obj));
 				},
 				onChanged : function(obj) {
-					$('#on-changed-2').html('onChanged => ' + JSON.stringify(obj));
+					$('#on-changed-2').html('onChanged => ' + objToString(obj));
 				},
 				onTargetSnapPositionChanged : function(obj) {
-					$('#on-target-snap-position-changed-2').html('onTargetSnapPositionChanged => ' + JSON.stringify(obj));
+					$('#on-target-snap-position-changed-2').html('onTargetSnapPositionChanged => ' + objToString(obj));
 					$radioBoxes.each(function(index, value) {
 						if (obj.targetStep === index) {
 							$(value).prop('checked', true);
@@ -78,7 +87,7 @@
 					});
 				},
 				onComplete : function(obj) {
-					$('#on-complete-2').html('onComplete => ' + JSON.stringify(obj));
+					$('#on-complete-2').html('onComplete => ' + objToString(obj));
 				}
 			});
 			
