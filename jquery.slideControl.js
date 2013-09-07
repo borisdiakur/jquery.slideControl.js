@@ -1,5 +1,5 @@
 /*!
- * jquery.slideControl.js ~ v1.0 ~ Copyright (c) 2013 Boris Diakur, https://github.com/borisdiakur/jquery.slideControl.js
+ * jquery.slideControl.js ~ v0.1.0 ~ Copyright (c) 2013 Boris Diakur, https://github.com/borisdiakur/jquery.slideControl.js
  * Released under WTFPL license, http://wtfpl.org/
  */
 (function($, window, document) { 'use strict';
