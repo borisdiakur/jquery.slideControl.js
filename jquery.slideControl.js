@@ -151,8 +151,7 @@
 
       var
         pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
-        slideControlHorizontalPadding = parseFloat($slideControl.css('padding-left')) + parseFloat($slideControl.css('padding-right')),
-        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / ($slideControl.width()), 1)),
+        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1)),
         infoObj;
       
       $slider.css('left', relativePosition * 100 + '%');
