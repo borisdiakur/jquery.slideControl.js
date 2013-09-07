@@ -51,9 +51,9 @@
     
     $slideControl.trigger('onStart', infoObj);
     $slideControl.trigger('onChanged', infoObj);
-    $slider.animate({
+    $slider.stop().animate({
       'left': (sliderOffset * 100) + '%'
-    }, 100, function() {
+    }, 150, function() {
       $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
     });
   }
@@ -67,9 +67,9 @@
     
     $slideControl.trigger('onStart', infoObj);
     $slideControl.trigger('onChanged', infoObj);
-    $slider.animate({
+    $slider.stop().animate({
       'left': (slideToInfoObj_.relativePosition * 100) + '%'
-    }, 100, function() {
+    }, 150, function() {
       $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
     });
   }
@@ -83,9 +83,9 @@
       $slideControl_.data('relativePosition', infoObj.relativeTargetPosition);
     }
     
-    $slider_.animate({
+    $slider_.stop().animate({
         'left': (infoObj.relativeTargetPosition * 100) + '%'
-    }, 100, function() {
+    }, 150, function() {
       $slideControl_.trigger('onComplete', infoObj);
     });
   }
@@ -157,10 +157,10 @@
       infoObj = _getInfoObject($slideControl, $slider);
       $slideControl.trigger('onStart', infoObj);
       $slideControl.trigger('onChanged', infoObj);
-      
-      $slider.animate({
+
+      $slider.stop().animate({
         'left': relativePosition * 100 + '%'
-      }, 100, function() {
+      }, 150, function() {
         if (relativePosition !== $slideControl.data('relativePosition')) {
           $slideControl.data('relativePosition', relativePosition);
         }
