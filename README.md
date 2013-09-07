@@ -1,7 +1,5 @@
 #jquery.slideControl.js
 
----
-
 ##Summary
 
 jquery.slideControl.js is a lightweight, responsive, jQuery based slide control plugin which supports snapping into steps and includes callback functionality.
