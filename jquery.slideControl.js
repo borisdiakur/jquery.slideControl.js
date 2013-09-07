@@ -154,16 +154,18 @@
         relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1)),
         infoObj;
       
-      $slider.css('left', relativePosition * 100 + '%');
-      if (relativePosition !== $slideControl.data('relativePosition')) {
-        $slideControl.data('relativePosition', relativePosition);
-      }
-      
       infoObj = _getInfoObject($slideControl, $slider);
       $slideControl.trigger('onStart', infoObj);
       $slideControl.trigger('onChanged', infoObj);
       
-      _snapIntoStep($slideControl, $slider);
+      $slider.animate({
+        'left': relativePosition * 100 + '%'
+      }, 100, function() {
+        if (relativePosition !== $slideControl.data('relativePosition')) {
+          $slideControl.data('relativePosition', relativePosition);
+        }
+        _snapIntoStep($slideControl, $slider);
+      }); 
     });
     
     $(document).on('mousemove touchmove', function(event_) {
