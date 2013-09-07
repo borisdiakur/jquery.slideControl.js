@@ -43,7 +43,7 @@ Tested with jQuery v1.9.1 on IE6+ and all major desktop and mobile browsers.
 
 ### `slideToStep`(`Number`)
 
-Only argument should be a zero-indexed integer.
+Only argument should be an integer (starting from 0).
 
 ### `slideToRelativePosition`(`Number`)
 
@@ -52,7 +52,7 @@ Only argument should be a float between 0 (slide left) and 1 (slide right).
 ## Usage suggestions
 
 * Check out the [live demo](http://borisdiakur.com/jquery.slideControl.js/demo.html) source code
-* Use either step options and API or current relative position option and API - do not try to use both on the same slide control.
+* Use either step options and API or current relative position option and relative position API - do not try to use both on the same slide control.
 * Put the slide control into a container. Set position, width and background image of the slide control by setting the according css on the container.
 
 ## Contributing
