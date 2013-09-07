@@ -13,7 +13,7 @@
 		.slide-control {
 			position: relative;
 			width: 50%;
-			height: 80px;
+			height: 100px;
 			margin: 0 auto;
 			background-color: gray;
 		}
@@ -29,6 +29,19 @@
 		}
 		.slider:active, .slider:focus {
 			cursor: ew-resize;
+		}
+		.slide-left, .slide-right {
+			position: absolute;
+			top: 0;
+			height: 100px;
+			width: 40px;
+			background-color: blue;
+		}
+		.slide-left {
+			left: -40px;
+		}
+		.slide-right {
+			right: -40px;
 		}
 	</style>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -108,6 +121,8 @@
 	</div>
 	<br>
 	<div id="slide-control-1" class="slide-control">
+		<div class="slide-left">&nbsp;</div>
+		<div class="slide-right">&nbsp;</div>
 		<a href="#drag-me" class="slider"></a>
 	</div>
 	<br>
@@ -126,6 +141,8 @@
 		<input type="radio" name="step" value="4"><label>step 4</label>
 	</div>
 	<div id="slide-control-2" class="slide-control">
+		<div class="slide-left">&nbsp;</div>
+		<div class="slide-right">&nbsp;</div>
 		<a href="#drag-me" class="slider"></a>
 	</div>
 	<br>

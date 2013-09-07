@@ -46,7 +46,7 @@
       $slider = $slideControl.find('.slider'),
       slideControlWidth = $slideControl.width(),
       stepWidth = slideControlWidth / (slideToInfoObj_.steps - 1),
-      sliderOffset = (stepWidth * slideToInfoObj_.step) / $slideControl.width(),
+      sliderOffset = (stepWidth * slideToInfoObj_.step) / slideControlWidth,
       infoObj = _getInfoObject($slideControl, $slider);
     
     $slideControl.trigger('onStart', infoObj);
@@ -105,7 +105,7 @@
       
     $slider.css({
       'margin-left': $slider.width() / -2,
-      'top': ($slideControl.height() / 2) - ($slider.height() / 2) 
+      'top': ($slideControl.height() / 2) - ($slider.height() / 2)
     });
     
     $slideControl.on('onStart', function(event_, arg_) {
@@ -148,9 +148,11 @@
     $slideControl.on('click', function(event_) {
       event_.preventDefault();
       event_.stopImmediatePropagation();
+
       var
         pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
-        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1)),
+        slideControlHorizontalPadding = parseFloat($slideControl.css('padding-left')) + parseFloat($slideControl.css('padding-right')),
+        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / ($slideControl.width()), 1)),
         infoObj;
       
       $slider.css('left', relativePosition * 100 + '%');
