@@ -51,7 +51,7 @@ Only argument should be a float between 0 (slide left) and 1 (slide right).
 
 ## Usage suggestions
 
-* Check out the [live demo](http://borisdiakur.com/jquery.slideControl.js/demo.html) source code
+* Check out the [live demo](http://borisdiakur.com/jquery.slideControl.js/demo.html) source code.
 * Use either step options and API or current relative position option and relative position API - do not try to use both on the same slide control.
 * Put the slide control into a container. Set position, width and background image of the slide control by setting the according css on the container.
 
@@ -63,6 +63,8 @@ Issues and Pull-requests welcome.
 
 v0.1.0 - Alpha
 
-#### WTFPL License ([http://wtfpl.org/](http://wtfpl.org/))
+## License
+
+### WTFPL License ([http://wtfpl.org/](http://wtfpl.org/))
 
 Copyright © 2013 Boris Diakur [contact@borisdiakur.com](mailto:contact@borisdiakur.com)
