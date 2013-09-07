@@ -7,6 +7,7 @@ jquery.slideControl.js is a lightweight, responsive, jQuery based slide control 
 ##Features
 
 * Simple
+* Lightweight (4.3KB, 1.5KB Gzip)
 * Robust (tested with jQuery v1.9.1 on IE6+ and all major desktop and mobile browsers)
 * Responsive
 * Snap into step functionality
