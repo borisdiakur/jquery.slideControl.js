@@ -162,7 +162,7 @@
           slideControlWidth = $slideControl.width(),
           stepWidth = slideControlWidth / ($slideControl.data('steps') - 1),
           targetStep = Math.round((pageX - $slideControl.offset().left) / stepWidth),
-          relativeTargetPosition = stepWidth * targetStep / slideControlWidth;
+          relativeTargetPosition = Math.max(0, Math.min(stepWidth * targetStep / slideControlWidth, 1));
         
         $slider.stop().animate({
           'left': relativeTargetPosition * 100 + '%'
