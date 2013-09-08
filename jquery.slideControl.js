@@ -19,7 +19,7 @@
       slideControlWidth = $slideControl_.width(),
       stepWidth = $slideControl_.data('steps') ? slideControlWidth / ($slideControl_.data('steps') - 1) : null,
       targetStep = $slideControl_.data('steps') ? Math.round(sliderOffset / stepWidth) : null,
-      relativeTargetPosition = $slideControl_.data('steps') ? Math.round(stepWidth * targetStep) / slideControlWidth : sliderOffset / slideControlWidth,
+      relativeTargetPosition = $slideControl_.data('steps') ? stepWidth * targetStep / slideControlWidth : sliderOffset / slideControlWidth,
       infoObject;
     
     $slideControl_.data('relativeTargetPosition', relativeTargetPosition);
@@ -62,7 +62,6 @@
     var
       $slideControl = slideToInfoObj_.slideControl,
       $slider = $slideControl.find('.slider'),
-      slideControlWidth = $slideControl.width(),
       infoObj = _getInfoObject($slideControl, $slider);
     
     $slideControl.trigger('onStart', infoObj);
@@ -148,7 +147,7 @@
     $slideControl.on('click', function(event_) {
       event_.preventDefault();
       event_.stopImmediatePropagation();
-
+      
       var
         pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
         relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1)),
@@ -157,15 +156,32 @@
       infoObj = _getInfoObject($slideControl, $slider);
       $slideControl.trigger('onStart', infoObj);
       $slideControl.trigger('onChanged', infoObj);
-
-      $slider.stop().animate({
-        'left': relativePosition * 100 + '%'
-      }, 150, function() {
-        if (relativePosition !== $slideControl.data('relativePosition')) {
-          $slideControl.data('relativePosition', relativePosition);
-        }
-        _snapIntoStep($slideControl, $slider);
-      }); 
+      
+      if ($slideControl.data('steps')) {
+        var
+          slideControlWidth = $slideControl.width(),
+          stepWidth = slideControlWidth / ($slideControl.data('steps') - 1),
+          targetStep = Math.round((pageX - $slideControl.offset().left) / stepWidth),
+          relativeTargetPosition = stepWidth * targetStep / slideControlWidth;
+        
+        $slider.stop().animate({
+          'left': relativeTargetPosition * 100 + '%'
+        }, 150, function() {
+          if (relativeTargetPosition !== $slideControl.data('relativePosition')) {
+            $slideControl.data('relativePosition', relativeTargetPosition);
+          }
+          $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
+        });
+      } else {
+        $slider.stop().animate({
+          'left': relativePosition * 100 + '%'
+        }, 150, function() {
+          if (relativePosition !== $slideControl.data('relativePosition')) {
+            $slideControl.data('relativePosition', relativePosition);
+          }
+          $slideControl.trigger('onComplete', _getInfoObject($slideControl, $slider));
+        });
+      }
     });
     
     $(document).on('mousemove touchmove', function(event_) {
