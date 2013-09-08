@@ -30,7 +30,7 @@ jquery.slideControl.js is a lightweight, responsive, jQuery based slide control 
 
 Tested with jQuery v1.9.1 on IE6+ and all major desktop and mobile browsers.
 
-## Initialization options
+## Initialization Options
 
 * `currentRelativePosition` (default 0)
 * `steps` (default `undefinded`)
@@ -50,7 +50,7 @@ Only argument should be an integer (starting from 0).
 
 Only argument should be a float between 0 (slide left) and 1 (slide right).
 
-## Usage suggestions
+## Usage Suggestions
 
 * Check out the [live demo](http://borisdiakur.com/jquery.slideControl.js/demo.html) source code.
 * Use either step options and API or current relative position option and relative position API - do not try to use both on the same slide control.
