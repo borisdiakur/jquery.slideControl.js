@@ -23,8 +23,8 @@ jquery.slideControl.js is a lightweight, responsive, jQuery based slide control 
 
 ## Download
 
-* Development [jquery.slideControl.js](https://raw.github.com/borisdiakur/jquery.slideControl.js/master/jquery.slideControl.js) 9KB
-* Production [jquery.slideControl.min.js](https://raw.github.com/borisdiakur/jquery.slideControl.js/master/jquery.slideControl.min.js) 4.3KB (1.5KB Gzip)
+* Development [jquery.slideControl.js](https://raw.github.com/borisdiakur/jquery.slideControl.js/master/jquery.slideControl.js) 9.8KB
+* Production [jquery.slideControl.min.js](https://raw.github.com/borisdiakur/jquery.slideControl.js/master/jquery.slideControl.min.js) 4.5KB (1.5KB Gzip)
 
 ## Browser Support
 
