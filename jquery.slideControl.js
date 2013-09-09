@@ -89,6 +89,29 @@
     });
   }
   
+  function _onMouseTouchMove(event_) {
+    var
+      $slideControl = event_.data.slideControl,
+      $slider = event_.data.slider;
+    
+    if ($slider.hasClass('dragable')) {
+      
+      if (_isTouchDevice() && String(event_.originalEvent).indexOf('MouseEvent') >= 0) {
+        return;
+      }
+      
+      var
+        pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
+        relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1));
+      
+      $slider.css('left', relativePosition * 100 + '%');
+      if (relativePosition !== $slideControl.data('relativePosition')) {
+        $slideControl.data('relativePosition', relativePosition);
+      }
+      $slideControl.trigger('onChanged', _getInfoObject($slideControl, $slider));
+    }
+  }
+  
   function _initialize(context_, settings_) {
     var
       $slideControl = $(context_),
@@ -132,6 +155,7 @@
       event_.preventDefault();
       event_.stopImmediatePropagation();
     }).on('mousedown touchstart', function() {
+      $(document).on('mousemove touchmove', {slideControl: $slideControl, slider: $slider}, _onMouseTouchMove);
       if (_isTouchDevice()) {
         $('body').css('overflow', 'hidden').on('touchmove', _preventBodyScrolling);
       }
@@ -184,24 +208,8 @@
       }
     });
     
-    $(document).on('mousemove touchmove', function(event_) {
-      if ($slider.hasClass('dragable')) {
-        
-        if (_isTouchDevice() && String(event_.originalEvent).indexOf('MouseEvent') >= 0) {
-          return;
-        }
-        
-        var
-          pageX = (event_.originalEvent && event_.originalEvent.touches && event_.originalEvent.touches[0].pageX) ? event_.originalEvent.touches[0].pageX : event_.pageX,
-          relativePosition = Math.max(0, Math.min((pageX - $slideControl.offset().left) / $slideControl.width(), 1));
-        
-        $slider.css('left', relativePosition * 100 + '%');
-        if (relativePosition !== $slideControl.data('relativePosition')) {
-          $slideControl.data('relativePosition', relativePosition);
-        }
-        $slideControl.trigger('onChanged', _getInfoObject($slideControl, $slider));
-      }
-    }).on('mouseup touchend touchcancel', function(event_) {
+    $(document).on('mouseup touchend touchcancel', function(event_) {
+      $(document).off('mousemove touchmove', _onMouseTouchMove);
       $('body').css('overflow', '').off('touchmove', _preventBodyScrolling);
       if ($slider.hasClass('dragable')) {
         if (!isNaN(parseInt($slideControl.data('steps'), 10))) {
