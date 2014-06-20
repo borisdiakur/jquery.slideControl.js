@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>jquery.slideControl.js by borisdiakur</title>
@@ -11,61 +12,216 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
+
+    <style>
+    #radio-boxes {
+        text-align: center;
+    }
+    .slide-control {
+        position: relative;
+        width: 50%;
+        height: 100px;
+        margin: 0 auto;
+        background-color: gray;
+    }
+    .slider {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        background-color: red;
+        display: block;
+    }
+    .slider:hover {
+        cursor: pointer;
+    }
+    .slider:active, .slider:focus {
+        cursor: ew-resize;
+    }
+    .slide-left, .slide-right {
+        position: absolute;
+        top: 0;
+        height: 100px;
+        width: 40px;
+        background-color: blue;
+    }
+    .slide-left {
+        left: -40px;
+    }
+    .slide-right {
+        right: -40px;
+    }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="javascripts/jquery.slideControl.min.js"></script>
+    <script>
+    $(function() {
+        'use strict';
+
+        var $radioBoxes = $('input[type=radio]');
+
+        function objToString(obj) {
+            var str = '',
+                f = true;
+            for (var p in obj) {
+                if (f) {
+                    f = false;
+                } else {
+                    str += ', ';
+                }
+                str += p + ': ' + obj[p];
+            }
+            return '{' + str + '}';
+        }
+
+        $('#slide-control-1').slideControl({
+            currentRelativePosition: 0.25,
+            onStart: function(obj) {
+                $('#on-start-1').html('onStart => ' + objToString(obj));
+            },
+            onChanged: function(obj) {
+                $('#on-changed-1').html('onChanged => ' + objToString(obj));
+            },
+            onComplete: function(obj) {
+                $('#on-complete-1').html('onComplete => ' + objToString(obj));
+            }
+        });
+
+        $('#slide-to-relative-position-button').on('click', function() {
+            var relativePosition = $('#slide-to-relative-position-input').prop('value');
+            if (!isNaN(relativePosition) && relativePosition >= 0 && relativePosition <= 1) {
+                $('#slide-control-1').slideControl('slideToRelativePosition', relativePosition);
+            }
+        });
+
+        $('#slide-control-2').slideControl({
+            steps: $radioBoxes.size(),
+            currentStep: 3,
+            onStart: function(obj) {
+                $('#on-start-2').html('onStart => ' + objToString(obj));
+            },
+            onChanged: function(obj) {
+                $('#on-changed-2').html('onChanged => ' + objToString(obj));
+            },
+            onTargetSnapPositionChanged: function(obj) {
+                $('#on-target-snap-position-changed-2').html('onTargetSnapPositionChanged => ' + objToString(obj));
+                $radioBoxes.each(function(index, value) {
+                    if (obj.targetStep === index) {
+                        $(value).prop('checked', true);
+                    } else {
+                        $(value).prop('checked', false);
+                    }
+                });
+            },
+            onComplete: function(obj) {
+                $('#on-complete-2').html('onComplete => ' + objToString(obj));
+            }
+        });
+
+        $radioBoxes.each(function(index, value) {
+            var $radioBox = $(value);
+
+            $radioBox.on('click', function() {
+                $('#slide-control-2').slideControl('slideToStep', index);
+            });
+        });
+    });
+    </script>
+</head>
+
+<body>
     <div class="wrapper">
-      <header>
-        <h1>jquery.slideControl.js</h1>
-        <p>jquery.slideControl.js</p>
+        <header>
+            <h1>jquery.slideControl.js</h1>
+            <p>jquery.slideControl.js</p>
 
-        <p class="view"><a href="https://github.com/borisdiakur/jquery.slideControl.js">View the Project on GitHub <small>borisdiakur/jquery.slideControl.js</small></a></p>
+            <p class="view"><a href="https://github.com/borisdiakur/jquery.slideControl.js">View the Project on GitHub <small>borisdiakur/jquery.slideControl.js</small></a>
+            </p>
 
 
-        <ul>
-          <li><a href="https://github.com/borisdiakur/jquery.slideControl.js/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/borisdiakur/jquery.slideControl.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/borisdiakur/jquery.slideControl.js">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+            <ul>
+                <li><a href="https://github.com/borisdiakur/jquery.slideControl.js/zipball/master">Download <strong>ZIP File</strong></a>
+                </li>
+                <li><a href="https://github.com/borisdiakur/jquery.slideControl.js/tarball/master">Download <strong>TAR Ball</strong></a>
+                </li>
+                <li><a href="https://github.com/borisdiakur/jquery.slideControl.js">View On <strong>GitHub</strong></a>
+                </li>
+            </ul>
+        </header>
+        <section>
+            <h3>
+                <a name="jQuery.slideControl.js examples" class="anchor" href="#examples">
+                    <span class="octicon octicon-link"></span>
+                </a>jQuery.slideControl.js examples</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+            <p>Note that there is cleaner demo page included in the project: <a href="https://github.com/borisdiakur/jquery.slideControl.js/blob/master/demo.html" target="_blank">https://github.com/borisdiakur/jquery.slideControl.js/blob/master/demo.html</a>
+            </p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+            <h3>
+                <a name="example-without-steps" class="anchor" href="#example-without-steps">
+                    <span class="octicon octicon-link"></span>
+                </a>example without steps</h3>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+            <div id="text-input">
+                <label>slide to relative position</label>&nbsp;
+                <input id="slide-to-relative-position-input" type="text" placeholder="0 - 1.0">
+                <button id="slide-to-relative-position-button">go</button>
+            </div>
+            <br>
+            <div id="slide-control-1" class="slide-control">
+                <div class="slide-left">&nbsp;</div>
+                <div class="slide-right">&nbsp;</div>
+                <a href="#drag-me" class="slider"></a>
+            </div>
+            <br>
+            <div id="on-start-1">&nbsp;</div>
+            <div id="on-changed-1">&nbsp;</div>
+            <div id="on-complete-1">&nbsp;</div>
+            <br>
+            <hr>
+            <br>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+            <h3>
+                <a name="example-with-steps" class="anchor" href="#example-with-steps">
+                    <span class="octicon octicon-link"></span>
+                </a>example with steps</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+            <div id="radio-boxes">
+                <input type="radio" name="step" value="0">
+                <label>step 0</label>
+                <input type="radio" name="step" value="1">
+                <label>step 1</label>
+                <input type="radio" name="step" value="2">
+                <label>step 2</label>
+                <input type="radio" name="step" value="3" checked>
+                <label>step 3</label>
+                <input type="radio" name="step" value="4">
+                <label>step 4</label>
+            </div>
+            <div id="slide-control-2" class="slide-control">
+                <div class="slide-left">&nbsp;</div>
+                <div class="slide-right">&nbsp;</div>
+                <a href="#drag-me" class="slider"></a>
+            </div>
+            <br>
+            <div id="on-start-2">&nbsp;</div>
+            <div id="on-changed-2">&nbsp;</div>
+            <div id="on-target-snap-position-changed-2">&nbsp;</div>
+            <div id="on-complete-2">&nbsp;</div>
+            <br>
+            <hr>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/borisdiakur">borisdiakur</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+        </section>
+        <footer>
+            <p>This project is maintained by <a href="https://github.com/borisdiakur">borisdiakur</a>
+            </p>
+            <p>
+                <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a>
+                </small>
+            </p>
+        </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+
+</body>
+
 </html>
