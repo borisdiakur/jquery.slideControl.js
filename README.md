@@ -14,12 +14,12 @@ jquery.slideControl.js is a lightweight, responsive, jQuery based slide control 
 * Callback functionality
   * onStart
   * onChanged
-  * onTargetSnapPositionChanged 
+  * onTargetSnapPositionChanged
   * onComplete
 
-## Live Demo
+## Demo
 
-### [http://borisdiakur.com/jquery.slideControl.js/demo.html](http://borisdiakur.com/jquery.slideControl.js/demo.html)
+### [http://borisdiakur.github.io/jquery.slideControl.js/](http://borisdiakur.github.io/jquery.slideControl.js/)
 
 ## Download
 
