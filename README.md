@@ -14,7 +14,7 @@ Tested with jQuery v1.9.1 on IE6+ and all major desktop and mobile browsers.
 
 Install with bower
 
-    bower install slidecontrol --save
+    bower install jquery.slidecontrol.js --save
 
 Or just download
 

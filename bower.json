@@ -1,5 +1,5 @@
 {
-    "name": "slidecontrol",
+    "name": "jquery.slidecontrol.js",
     "description": "jquery.slideControl.js is a lightweight, responsive, jQuery based slide control plugin which supports snapping into steps and includes callback functionality.",
     "version": "1.0.0",
     "main": "jquery.slideControl.js",
