@@ -1,0 +1,29 @@
+{
+    "name": "slidecontrol",
+    "description": "jquery.slideControl.js is a lightweight, responsive, jQuery based slide control plugin which supports snapping into steps and includes callback functionality.",
+    "version": "1.0.0",
+    "main": "jquery.slideControl.js",
+    "ignore": [
+        ".jshintrc",
+        ".jscsrc",
+        "demo.html"
+    ],
+    "dependencies": {
+        "jquery": "~1.9.1"
+    },
+    "keywords": [
+        "slide",
+        "slider",
+        "slide control",
+        "fader",
+        "sliding pot"
+    ],
+    "license": "WTFPL",
+    "authors": [
+        "Boris Diakur <contact@borisdiakur.com> (https://github.com/borisdiakur)"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/borisdiakur/jquery.slideControl.js.git"
+    }
+}
